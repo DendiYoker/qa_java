@@ -3,6 +3,8 @@ package com.example;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
@@ -61,14 +63,40 @@ class FelineTest {
     }
 
     @Test
-    void getFamily() {
+    @DisplayName("Проверка, что метод getFamily возвращает то что нужно")
+    void testGetFamily_ReturnsCorrectValue() {
+        Feline feline = new Feline();
+        String expectedReturnFamily = "Кошачьи";
+
+        String actualReturnFamily = feline.getFamily();
+
+        assertEquals(expectedReturnFamily, actualReturnFamily, String.format("Метод getFamily() должен возвращать '%s'", expectedReturnFamily));
+
+
     }
 
     @Test
-    void getKittens() {
+    @DisplayName("Проверка метода getKittens без параметра : убедиться что метод вызывает getKittens с парамтером 1")
+    void tesGetKittens_WithoutParam() {
+
+        int actualResult = felineSpy.getKittens();
+
+        Mockito.verify(felineSpy, Mockito.times(1)).getKittens(1);
+
+        assertEquals(1, actualResult);
+
     }
 
-    @Test
-    void testGetKittens() {
+
+    @ParameterizedTest
+    @ValueSource(ints = {-10, -1, 0, 1, 10, Integer.MAX_VALUE})
+    @DisplayName("Проверка метода getKittens с параметро: убедиться что метод возвращает параметр")
+    void getKittens_WithParameter_ReturnsParameter(int kittensCount) {
+        Feline feline = new Feline();
+
+        int actualResult = feline.getKittens(kittensCount);
+
+        assertEquals(kittensCount, actualResult);
+
     }
 }
