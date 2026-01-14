@@ -6,6 +6,7 @@ public class Cat {
 
     Predator predator;
 
+    // ToDo помоему тут лучше принимать параметр Predator predator
     public Cat(Feline feline) {
         this.predator = feline;
     }
