@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CatTest {
 
     @Spy
-    Feline felineSpy;
+    private Feline felineSpy;
 
     @Test
     @DisplayName("Проверка что метод возвращает корректное значение")
