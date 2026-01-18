@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -15,28 +15,28 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class LionTest {
-    @Spy
-    private AnimalBehavior animalBehaviorSpy ;
+    @Mock
+    private Feline felineSpy;
 
     @Test
-    @DisplayName("getKittens() должен делегировать вызов animalBehavior.getKittens()")
-    void getKittens_DelegatesToAnimalBehavior() throws Exception {
-        Lion lion = new Lion("Самец", animalBehaviorSpy);
+    @DisplayName("getKittens() должен делегировать вызов Feline.getKittens()")
+    void getKittens_DelegatesToFeline() throws Exception {
+        Lion lion = new Lion("Самец", felineSpy);
 
-        Mockito.when(animalBehaviorSpy.getKittens()).thenReturn(3);
+        Mockito.when(felineSpy.getKittens()).thenReturn(3);
 
-        int actualKittens = lion.getKittens();
+        lion.getKittens();
 
-        Mockito.verify(animalBehaviorSpy, Mockito.times(1)).getKittens();
+        Mockito.verify(felineSpy, Mockito.times(1)).getKittens();
     }
 
     @Test
-    @DisplayName("getKittens() возвращает результат animalBehavior.getKittens()")
-    void getKittens_ReturnsResultFromAnimalBehavior() throws Exception {
-        Lion lion = new Lion("Самка", animalBehaviorSpy);
+    @DisplayName("getKittens() возвращает результат Feline.getKittens()")
+    void getKittens_ReturnsResultFromFeline() throws Exception {
+        Lion lion = new Lion("Самка", felineSpy);
         int expectedKittens = 5;
 
-        Mockito.when(animalBehaviorSpy.getKittens()).thenReturn(expectedKittens);
+        Mockito.when(felineSpy.getKittens()).thenReturn(expectedKittens);
 
         int actualKittens = lion.getKittens();
 
@@ -52,7 +52,7 @@ class LionTest {
     })
     @DisplayName("Проверка наличия гривы у льва в зависимости от пола + проверка конструктора")
     void testDoesHaveMane_WithDifferentSex_ReturnsExpectedResul(String sex,boolean expectedHasMane ) throws Exception {
-        Lion lion = new Lion(sex, animalBehaviorSpy);
+        Lion lion = new Lion(sex, felineSpy);
 
         boolean result = lion.doesHaveMane();
 
@@ -62,26 +62,27 @@ class LionTest {
     // Тест на исключение для невалидного пола
     @Test
     @DisplayName("Проверка конструктора, при невалидном поле должно выбрасываться исключение")
-    void lionConstructor_WithInvalidSex_ThrowsException() throws Exception {
+    void lionConstructor_WithInvalidSex_ThrowsException() {
 
         String expectedMessage = "Используйте допустимые значения пола животного - самец или самка";
 
         Exception actualException = assertThrows(Exception.class,
-                () -> { new Lion("Чупакабра", animalBehaviorSpy);});
+                () -> new Lion("Чупакабра", felineSpy));
 
         assertEquals(expectedMessage, actualException.getMessage());
     }
 
     @Test
-    @DisplayName("Проверка, что getFood вызывает метод getFood итерфейса один раз, с нужным параметром")
+    @DisplayName("Проверка, что getFood вызывает метод getFood абстрактного класса Animal один раз, с нужным параметром")
     void testGetFood_DelegatesToPredator() throws Exception {
-        Lion lion = new Lion("Самец", animalBehaviorSpy);
+        Lion lion = new Lion("Самец", felineSpy);
         List<String> dummyFood = List.of("мясо", "птица");
-        Mockito.when(animalBehaviorSpy.getFood("Хищник")).thenReturn(dummyFood);
 
-        List<String> actualFood = lion.getFood();
+        Mockito.when(felineSpy.getFood("Хищник")).thenReturn(dummyFood);
 
-        Mockito.verify(animalBehaviorSpy, Mockito.times(1)).getFood("Хищник");
+        lion.getFood();
+
+        Mockito.verify(felineSpy, Mockito.times(1)).getFood("Хищник");
 
     }
 
@@ -89,10 +90,10 @@ class LionTest {
     @DisplayName("Проверка, что getFood возвращает то что получил из метода getFood")
     void testGetFood_ReturnsPredatorResult() throws Exception {
 
-        Lion lion = new Lion("Самец", animalBehaviorSpy);
+        Lion lion = new Lion("Самец", felineSpy);
 
         List<String> mockedGetFood = List.of("Мокаем что угодно", "лишь бы не null");
-        Mockito.when(animalBehaviorSpy.getFood("Хищник")).thenReturn(mockedGetFood);
+        Mockito.when(felineSpy.getFood("Хищник")).thenReturn(mockedGetFood);
 
         List<String> actualFood = lion.getFood();
 
@@ -101,12 +102,11 @@ class LionTest {
     }
 
     @Test
-    @DisplayName("Проверка, что getFood пробрасывает исключение от animalBehavior.getFood")
-    void getFood_ShouldPropagateExceptionFromAnimalBehavior() throws Exception {
-        Lion lion = new Lion("Самец", animalBehaviorSpy);
+    @DisplayName("Проверка, что getFood пробрасывает исключение от Feline.getFood")
+    void getFood_ShouldPropagateExceptionFromFeline() throws Exception {
+        Lion lion = new Lion("Самец", felineSpy);
         Exception expectedException = new Exception("Ошибка получения еды");
-        Mockito.when(animalBehaviorSpy.getFood("Хищник")).thenThrow(expectedException);
-
+        Mockito.when(felineSpy.getFood("Хищник")).thenThrow(expectedException);
 
         Exception actualException = assertThrows(Exception.class, lion::getFood);
 

@@ -13,12 +13,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class LeonAlexTest {
     @Spy
-    AnimalBehavior animalBehavior;
+    Feline feline;
 
     @Test
     @DisplayName("Проверка что метод возвращает корректное значение")
     void testGetFriends_ReturnsCorrectValue() throws Exception {
-        LeonAlex leonAlex = new LeonAlex(animalBehavior);
+        LeonAlex leonAlex = new LeonAlex(feline);
         List<String> expectedResult = List.of("Марти", "Глория", "Мелман");
 
         List<String> actualResult = leonAlex.getFriends();
@@ -29,7 +29,7 @@ class LeonAlexTest {
     @Test
     @DisplayName("Проверка что метод возвращает корректное значение")
     void testGetPlaceOfLiving_ReturnsCorrectValue() throws Exception {
-        LeonAlex leonAlex = new LeonAlex(animalBehavior);
+        LeonAlex leonAlex = new LeonAlex(feline);
         String expectedResult = "Нью-Йоркский зоопарк";
 
         String actualResult = leonAlex.getPlaceOfLiving();
@@ -40,7 +40,7 @@ class LeonAlexTest {
     @Test
     @DisplayName("Проверка что метод возвращает корректное значение")
     void tesGetKittens_ReturnsCorrectValue() throws Exception {
-        LeonAlex leonAlex = new LeonAlex(animalBehavior);
+        LeonAlex leonAlex = new LeonAlex(feline);
         int expectedResult = 0;
 
         int actualResult = leonAlex.getKittens();

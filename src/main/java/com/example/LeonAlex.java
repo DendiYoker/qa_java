@@ -7,8 +7,8 @@ public class LeonAlex extends Lion{
     private static final String LIVING_PLACE = "Нью-Йоркский зоопарк";
     private static final List<String> FRIENDS = List.of("Марти", "Глория", "Мелман");
 
-    public LeonAlex(AnimalBehavior animalBehavior) throws Exception {
-        super(ALEX_SEX, animalBehavior);
+    public LeonAlex(Feline feline) throws Exception {
+        super(ALEX_SEX, feline);
     }
 
     public List<String> getFriends(){
